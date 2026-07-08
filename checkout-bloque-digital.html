@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bloque Digital — Reserva tu proyecto</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --concrete:#E7E4DC; --white:#FAFAF8; --charcoal:#1E1C1A; --charcoal-soft:#3A3835;
+    --slate:#54575D; --slate-soft:#8B8E93; --yellow:#F2B705; --yellow-dark:#C08A00;
+    --line: rgba(30,28,26,.14); --ease: cubic-bezier(.22,.61,.36,1);
+    --danger:#B3432F;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{ background:var(--concrete); color:var(--charcoal); font-family:'Inter', sans-serif; min-height:100vh; padding:60px 20px; }
+  .display{ font-family:'Space Grotesk', sans-serif; }
+  .mono{ font-family:'IBM Plex Mono', monospace; }
+  .app{ width:100%; max-width:640px; margin:0 auto; }
+
+  .brand{ display:flex; align-items:center; gap:12px; margin-bottom:36px; }
+  .brand-mark{ width:26px; height:26px; position:relative; flex-shrink:0; }
+  .brand-mark .b1{ position:absolute; left:0; bottom:0; width:7px; height:12px; background:var(--slate); }
+  .brand-mark .b2{ position:absolute; left:10px; bottom:0; width:7px; height:19px; background:var(--charcoal); }
+  .brand-mark .b3{ position:absolute; left:20px; bottom:0; width:7px; height:26px; background:var(--yellow); }
+  .brand-name{ font-family:'Space Grotesk', sans-serif; font-weight:700; font-size:1.15rem; }
+  .brand-tag{ font-family:'IBM Plex Mono', monospace; font-size:.68rem; letter-spacing:.08em; text-transform:uppercase; color:var(--slate); margin-top:2px; }
+
+  .progress{ display:flex; gap:6px; margin-bottom:32px; }
+  .progress .block{ flex:1; height:6px; background:rgba(30,28,26,.12); position:relative; overflow:hidden; }
+  .progress .block::after{ content:''; position:absolute; inset:0; background:var(--yellow); transform:translateX(-100%); transition:transform .5s var(--ease); }
+  .progress .block.done::after{ transform:translateX(0); }
+
+  .card{ background:var(--white); padding:40px 36px; }
+  @media (max-width:600px){ .card{ padding:28px 22px; } }
+  .step{ display:none; }
+  .step.active{ display:block; }
+
+  .step-label{ font-family:'IBM Plex Mono', monospace; font-size:.7rem; letter-spacing:.1em; text-transform:uppercase; color:var(--yellow-dark); margin-bottom:10px; }
+  .step-titulo{ font-family:'Space Grotesk', sans-serif; font-weight:600; font-size:1.4rem; margin-bottom:26px; }
+
+  /* Paso 1: paquetes */
+  .paquetes{ display:flex; flex-direction:column; gap:10px; margin-bottom:26px; }
+  .paquete-op{
+    border:1.5px solid var(--line); padding:18px 20px; cursor:pointer;
+    display:flex; justify-content:space-between; align-items:center; gap:16px;
+    transition:border-color .2s var(--ease), background .2s var(--ease);
+  }
+  .paquete-op:hover{ border-color:var(--charcoal); }
+  .paquete-op.selected{ border-color:var(--charcoal); background:var(--charcoal); color:var(--white); }
+  .paquete-op .nombre{ font-family:'Space Grotesk', sans-serif; font-weight:600; }
+  .paquete-op .desc{ font-size:.8rem; color:var(--slate-soft); margin-top:2px; }
+  .paquete-op.selected .desc{ color:rgba(250,248,245,.7); }
+  .paquete-op .precio{ font-family:'IBM Plex Mono', monospace; font-weight:600; white-space:nowrap; }
+
+  /* Paso 2: formulario */
+  .field{ margin-bottom:18px; }
+  .field label{ display:block; font-family:'IBM Plex Mono', monospace; font-size:.68rem; letter-spacing:.06em; text-transform:uppercase; color:var(--slate); margin-bottom:7px; }
+  .field input, .field textarea{
+    width:100%; border:none; border-bottom:1.5px solid var(--line);
+    padding:10px 2px; font-family:'Inter', sans-serif; font-size:.96rem; color:var(--charcoal); background:transparent;
+  }
+  .field input:focus, .field textarea:focus{ outline:none; border-bottom-color:var(--charcoal); }
+  .field textarea{ resize:vertical; min-height:70px; }
+
+  /* Paso 3: pago (modo prueba) */
+  .resumen-pago{ background:var(--concrete); padding:20px 22px; margin-bottom:22px; }
+  .resumen-pago .row{ display:flex; justify-content:space-between; font-size:.9rem; padding:6px 0; }
+  .resumen-pago .row.total{ font-weight:700; border-top:1px solid var(--line); margin-top:6px; padding-top:12px; }
+  .demo-banner{
+    background:#FBEFD2; border:1px solid var(--yellow-dark); color:var(--charcoal-soft);
+    font-size:.82rem; padding:12px 16px; margin-bottom:22px;
+  }
+  .demo-banner strong{ color:var(--charcoal); }
+  .card-fake{ border:1.5px solid var(--line); padding:20px; }
+  .card-fake .row2{ display:flex; gap:14px; }
+  .card-fake .row2 .field{ flex:1; }
+
+  /* Paso 4: confirmación */
+  .confirm-icon{ width:48px; height:48px; background:var(--yellow); display:flex; align-items:center; justify-content:center; font-family:'Space Grotesk',sans-serif; font-weight:700; font-size:1.3rem; margin-bottom:20px; }
+  .folio{ font-family:'IBM Plex Mono', monospace; font-size:1.3rem; font-weight:600; margin:6px 0 22px; }
+  .confirm-list{ list-style:none; margin-bottom:24px; }
+  .confirm-list li{ padding:9px 0; border-top:1px solid var(--line); font-size:.9rem; display:flex; justify-content:space-between; }
+  .confirm-list li:last-child{ border-bottom:1px solid var(--line); }
+  .confirm-list .k{ color:var(--slate); }
+
+  .error-msg{ color:var(--danger); font-size:.84rem; margin-bottom:16px; display:none; }
+  .error-msg.show{ display:block; }
+
+  .nav-row{ display:flex; justify-content:space-between; align-items:center; margin-top:8px; }
+  .btn{ font-family:'IBM Plex Mono', monospace; font-size:.78rem; letter-spacing:.05em; text-transform:uppercase; padding:12px 22px; cursor:pointer; border:none; transition:transform .2s var(--ease), opacity .2s; }
+  .btn-primary{ background:var(--charcoal); color:var(--white); }
+  .btn-primary:disabled{ opacity:.35; cursor:not-allowed; }
+  .btn-primary:not(:disabled):hover{ transform:translateY(-2px); }
+  .btn-ghost{ background:transparent; color:var(--slate); }
+  .btn-ghost:hover{ color:var(--charcoal); }
+  .copiado{ font-family:'IBM Plex Mono', monospace; font-size:.78rem; color:var(--yellow-dark); display:none; align-self:center; }
+  .copiado.show{ display:inline; }
+
+  /* ---------- LINK AL PANEL ---------- */
+  .panel-link{ font-family:'IBM Plex Mono', monospace; font-size:.78rem; color:var(--slate); text-decoration:underline; }
+  .panel-link:hover{ color:var(--charcoal); }
+
+  /* ---------- PANEL ADMIN ---------- */
+  .panel-overlay{
+    position:fixed; inset:0; z-index:200; background:rgba(30,28,26,.55);
+    display:flex; align-items:center; justify-content:center; padding:24px;
+    opacity:0; visibility:hidden; transition:opacity .3s var(--ease), visibility .3s;
+  }
+  .panel-overlay.open{ opacity:1; visibility:visible; }
+  .panel-modal{
+    background:var(--white); width:100%; max-width:760px; max-height:86vh; overflow-y:auto;
+    padding:36px 34px; position:relative;
+  }
+  .panel-head{ display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:24px; }
+  .panel-head .eyebrow{ font-family:'IBM Plex Mono', monospace; font-size:.72rem; letter-spacing:.1em; text-transform:uppercase; color:var(--yellow-dark); }
+  .panel-close{ width:32px; height:32px; border-radius:50%; background:var(--concrete); font-size:1.2rem; line-height:1; cursor:pointer; }
+
+  .login-box{ max-width:320px; margin:20px auto; text-align:center; }
+  .login-box h4{ font-family:'Space Grotesk', sans-serif; font-weight:600; font-size:1.1rem; margin:10px 0 22px; }
+  .login-box .field{ text-align:left; }
+  .login-box .btn{ width:100%; justify-content:center; margin-top:6px; }
+  .login-error{ display:none; margin-top:12px; font-size:.8rem; color:var(--danger); }
+  .login-error.show{ display:block; }
+
+  .panel-stats{ display:grid; grid-template-columns:repeat(3,1fr); gap:14px; margin-bottom:26px; }
+  .panel-stat{ background:var(--concrete); padding:16px; text-align:center; }
+  .panel-stat .num{ font-family:'Space Grotesk', sans-serif; font-weight:700; font-size:1.5rem; }
+  .panel-stat .label{ font-family:'IBM Plex Mono', monospace; font-size:.66rem; letter-spacing:.05em; text-transform:uppercase; color:var(--slate); margin-top:4px; }
+
+  .panel-table{ width:100%; border-collapse:collapse; font-size:.85rem; }
+  .panel-table th{ text-align:left; font-family:'IBM Plex Mono', monospace; font-size:.66rem; letter-spacing:.05em; text-transform:uppercase; color:var(--slate); border-bottom:2px solid var(--charcoal); padding:8px 6px; }
+  .panel-table td{ padding:10px 6px; border-bottom:1px solid var(--line); vertical-align:top; }
+  .panel-table select{ font-family:'IBM Plex Mono', monospace; font-size:.72rem; padding:5px 6px; border:1px solid var(--line); background:var(--white); }
+  .panel-empty{ text-align:center; color:var(--slate); padding:30px 0; font-size:.9rem; }
+</style>
+</head>
+<body>
+
+<div class="app">
+  <div class="brand">
+    <div class="brand-mark"><div class="b1"></div><div class="b2"></div><div class="b3"></div></div>
+    <div>
+      <div class="brand-name">BLOQUE DIGITAL</div>
+      <div class="brand-tag">Reserva tu proyecto</div>
+    </div>
+  </div>
+  <p style="margin-bottom:20px;"><a href="#" id="openPanel" class="panel-link">Ver historial de pedidos (admin)</a></p>
+
+  <div class="progress" id="progress">
+    <div class="block"></div><div class="block"></div><div class="block"></div>
+  </div>
+
+  <div class="card">
+
+    <!-- PASO 1: paquete -->
+    <div class="step active" id="paso1">
+      <div class="step-label">Paso 1 de 3</div>
+      <div class="step-titulo">Elige tu paquete</div>
+      <div class="paquetes" id="listaPaquetes"></div>
+      <div class="nav-row">
+        <span></span>
+        <button class="btn btn-primary" id="btnPaso1" disabled>Siguiente →</button>
+      </div>
+    </div>
+
+    <!-- PASO 2: datos -->
+    <div class="step" id="paso2">
+      <div class="step-label">Paso 2 de 3</div>
+      <div class="step-titulo">Tus datos</div>
+      <div class="field"><label for="fNombre">Nombre completo</label><input type="text" id="fNombre"></div>
+      <div class="field"><label for="fNegocio">Nombre de tu negocio</label><input type="text" id="fNegocio"></div>
+      <div class="field"><label for="fCorreo">Correo</label><input type="email" id="fCorreo"></div>
+      <div class="field"><label for="fTelefono">WhatsApp / Teléfono</label><input type="tel" id="fTelefono"></div>
+      <div class="field"><label for="fDescripcion">Cuéntanos brevemente tu proyecto (opcional)</label><textarea id="fDescripcion"></textarea></div>
+      <p class="error-msg" id="errorPaso2">Por favor llena nombre, negocio, correo y teléfono.</p>
+      <div class="nav-row">
+        <button class="btn btn-ghost" id="btnAtras2">← Atrás</button>
+        <button class="btn btn-primary" id="btnPaso2">Siguiente →</button>
+      </div>
+    </div>
+
+    <!-- PASO 3: pago (modo prueba) -->
+    <div class="step" id="paso3">
+      <div class="step-label">Paso 3 de 3</div>
+      <div class="step-titulo">Reserva tu lugar</div>
+      <div class="demo-banner"><strong>Modo de prueba:</strong> aún no está conectado a un procesador de pagos real. Nada de esto cobra dinero — solo simula el flujo completo.</div>
+      <div class="resumen-pago" id="resumenPago"></div>
+      <div class="card-fake">
+        <div class="field"><label>Número de tarjeta (simulado)</label><input type="text" placeholder="4242 4242 4242 4242" maxlength="19"></div>
+        <div class="row2">
+          <div class="field"><label>Vencimiento</label><input type="text" placeholder="MM/AA" maxlength="5"></div>
+          <div class="field"><label>CVV</label><input type="text" placeholder="123" maxlength="3"></div>
+        </div>
+      </div>
+      <p class="error-msg" id="errorPaso3">Hubo un problema al guardar tu reservación. Intenta de nuevo.</p>
+      <div class="nav-row">
+        <button class="btn btn-ghost" id="btnAtras3">← Atrás</button>
+        <button class="btn btn-primary" id="btnConfirmar">Confirmar reservación (prueba)</button>
+      </div>
+    </div>
+
+    <!-- PASO 4: confirmación -->
+    <div class="step" id="paso4">
+      <div class="confirm-icon">✓</div>
+      <div class="step-titulo">¡Tu proyecto quedó reservado!</div>
+      <div class="folio mono" id="folioTexto"></div>
+      <ul class="confirm-list" id="confirmLista"></ul>
+      <div class="nav-row">
+        <button class="btn btn-primary" id="btnCopiarResumen">Copiar resumen</button>
+        <span class="copiado" id="copiadoMsg">✓ Copiado</span>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<div class="panel-overlay" id="panelOverlay">
+  <div class="panel-modal">
+    <div class="panel-head">
+      <div>
+        <span class="eyebrow">Panel del negocio</span>
+        <h3 class="display">Historial de pedidos</h3>
+      </div>
+      <button class="panel-close" id="closePanel" aria-label="Cerrar">&times;</button>
+    </div>
+
+    <div id="loginBox" class="login-box">
+      <span class="eyebrow" style="color:var(--yellow-dark);">Acceso administrador</span>
+      <h4>Inicia sesión para ver los pedidos</h4>
+      <div class="field"><label for="loginEmail">Correo</label><input type="email" id="loginEmail"></div>
+      <div class="field"><label for="loginPassword">Contraseña</label><input type="password" id="loginPassword"></div>
+      <button class="btn btn-primary" id="loginBtn" type="button">Entrar</button>
+      <p class="login-error" id="loginError">Correo o contraseña incorrectos.</p>
+    </div>
+
+    <div id="panelContent" style="display:none;">
+      <div class="panel-stats">
+        <div class="panel-stat"><span class="num" id="statTotal">0</span><span class="label">Pedidos totales</span></div>
+        <div class="panel-stat"><span class="num" id="statHoy">0</span><span class="label">Hoy</span></div>
+        <div class="panel-stat"><span class="num" id="statMonto">$0</span><span class="label">En anticipos</span></div>
+      </div>
+      <table class="panel-table">
+        <thead><tr><th>Folio</th><th>Fecha</th><th>Negocio</th><th>Paquete</th><th>Anticipo</th><th>Estado</th></tr></thead>
+        <tbody id="panelBody"></tbody>
+      </table>
+      <p class="panel-empty" id="panelEmpty" style="display:none;">Aún no hay pedidos registrados.</p>
+      <button class="btn btn-ghost" id="logoutBtn" type="button" style="margin-top:18px;">Cerrar sesión</button>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+  const paquetes = [
+    { id: 'basico', nombre: 'Básico', desc: 'Landing de una sección', precio: 5000 },
+    { id: 'profesional', nombre: 'Profesional', desc: 'Sitio completo + base de datos', precio: 10000 },
+    { id: 'premium', nombre: 'Premium', desc: 'Panel con login propio', precio: 22000 }
+  ];
+
+  // Lee el paquete sugerido desde la URL, ej: ?paquete=profesional
+  const params = new URLSearchParams(window.location.search);
+  const paqueteSugerido = params.get('paquete');
+
+  let seleccionado = paquetes.find(p => p.id === paqueteSugerido) || null;
+  let pasoActual = 1;
+
+  const listaPaquetes = document.getElementById('listaPaquetes');
+  listaPaquetes.innerHTML = paquetes.map(p => `
+    <div class="paquete-op ${seleccionado && seleccionado.id === p.id ? 'selected' : ''}" data-id="${p.id}">
+      <div>
+        <div class="nombre">${p.nombre}</div>
+        <div class="desc">${p.desc}</div>
+      </div>
+      <div class="precio">$${p.precio.toLocaleString('es-MX')} MXN</div>
+    </div>
+  `).join('');
+
+  document.getElementById('btnPaso1').disabled = !seleccionado;
+
+  listaPaquetes.addEventListener('click', (e) => {
+    const op = e.target.closest('.paquete-op');
+    if (!op) return;
+    seleccionado = paquetes.find(p => p.id === op.dataset.id);
+    document.querySelectorAll('.paquete-op').forEach(el => el.classList.toggle('selected', el.dataset.id === seleccionado.id));
+    document.getElementById('btnPaso1').disabled = false;
+  });
+
+  function irAPaso(n){
+    document.querySelectorAll('.step').forEach(s => s.classList.remove('active'));
+    document.getElementById('paso' + n).classList.add('active');
+    document.querySelectorAll('.progress .block').forEach((b, i) => b.classList.toggle('done', i < n - 1));
+    pasoActual = n;
+  }
+
+  document.getElementById('btnPaso1').addEventListener('click', () => irAPaso(2));
+  document.getElementById('btnAtras2').addEventListener('click', () => irAPaso(1));
+
+  document.getElementById('btnPaso2').addEventListener('click', () => {
+    const nombre = document.getElementById('fNombre').value.trim();
+    const negocio = document.getElementById('fNegocio').value.trim();
+    const correo = document.getElementById('fCorreo').value.trim();
+    const telefono = document.getElementById('fTelefono').value.trim();
+    if (!nombre || !negocio || !correo || !telefono) {
+      document.getElementById('errorPaso2').classList.add('show');
+      return;
+    }
+    document.getElementById('errorPaso2').classList.remove('show');
+
+    const anticipo = Math.round(seleccionado.precio * 0.5);
+    document.getElementById('resumenPago').innerHTML = `
+      <div class="row"><span>Paquete</span><span>${seleccionado.nombre}</span></div>
+      <div class="row"><span>Precio total</span><span>$${seleccionado.precio.toLocaleString('es-MX')} MXN</span></div>
+      <div class="row total"><span>Anticipo a reservar (50%)</span><span>$${anticipo.toLocaleString('es-MX')} MXN</span></div>
+    `;
+    irAPaso(3);
+  });
+  document.getElementById('btnAtras3').addEventListener('click', () => irAPaso(2));
+
+  document.getElementById('btnCopiarResumen').addEventListener('click', () => {
+    const area = document.createElement('textarea');
+    area.value = window._resumenTexto || '';
+    document.body.appendChild(area);
+    area.select();
+    try { document.execCommand('copy'); } catch (e) {}
+    document.body.removeChild(area);
+    const msg = document.getElementById('copiadoMsg');
+    msg.classList.add('show');
+    setTimeout(() => msg.classList.remove('show'), 2000);
+  });
+
+  // ==================================================================
+  // CONEXIÓN A SUPABASE — reemplaza con los datos de tu proyecto
+  // Settings → API → Project URL / anon public key
+  // ==================================================================
+  try {
+    const SUPABASE_URL = 'https://txdggrjhjzypzkerwhjo.supabase.co';
+    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InR4ZGdncmpoanp5cHprZXJ3aGpvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODMzODk0ODcsImV4cCI6MjA5ODk2NTQ4N30.Bn4S8sIYT8hTzrEAXgmp85vK-GmNbqsyoM6h7c6fZJo';
+    if (typeof window.supabase === 'undefined') throw new Error('Supabase no cargó');
+    const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+    // ---- Confirmar reservación (guarda el pedido) ----
+    document.getElementById('btnConfirmar').addEventListener('click', async () => {
+      const btn = document.getElementById('btnConfirmar');
+      const errorEl = document.getElementById('errorPaso3');
+      btn.disabled = true;
+      btn.textContent = 'Guardando...';
+
+      const nombre = document.getElementById('fNombre').value.trim();
+      const negocio = document.getElementById('fNegocio').value.trim();
+      const correo = document.getElementById('fCorreo').value.trim();
+      const telefono = document.getElementById('fTelefono').value.trim();
+      const descripcion = document.getElementById('fDescripcion').value.trim();
+      const anticipo = Math.round(seleccionado.precio * 0.5);
+      const folio = 'BD-' + Date.now().toString().slice(-8);
+
+      try {
+        const { error } = await supabase.from('pedidos').insert([{
+          folio, paquete: seleccionado.nombre, precio: seleccionado.precio, anticipo,
+          nombre, negocio, correo, telefono, descripcion
+        }]);
+        if (error) throw error;
+
+        document.getElementById('folioTexto').textContent = folio;
+        document.getElementById('confirmLista').innerHTML = `
+          <li><span class="k">Paquete</span><span>${seleccionado.nombre}</span></li>
+          <li><span class="k">Precio total</span><span>$${seleccionado.precio.toLocaleString('es-MX')} MXN</span></li>
+          <li><span class="k">Anticipo</span><span>$${anticipo.toLocaleString('es-MX')} MXN</span></li>
+          <li><span class="k">Negocio</span><span>${negocio}</span></li>
+          <li><span class="k">Contacto</span><span>${correo}</span></li>
+        `;
+        window._resumenTexto = `Reservación Bloque Digital
+Folio: ${folio}
+Paquete: ${seleccionado.nombre} — $${seleccionado.precio.toLocaleString('es-MX')} MXN
+Anticipo: $${anticipo.toLocaleString('es-MX')} MXN
+Negocio: ${negocio}
+Contacto: ${nombre} — ${correo} — ${telefono}`;
+
+        irAPaso(4);
+      } catch (err) {
+        console.error(err);
+        errorEl.classList.add('show');
+      }
+      btn.disabled = false;
+      btn.textContent = 'Confirmar reservación (prueba)';
+    });
+
+    // ---- Panel de administrador: abrir / cerrar ----
+    document.getElementById('openPanel').addEventListener('click', async (e) => {
+      e.preventDefault();
+      document.getElementById('panelOverlay').classList.add('open');
+      const { data } = await supabase.auth.getSession();
+      if (data.session) { mostrarPanel(); cargarPedidos(); }
+      else { mostrarLogin(); }
+    });
+    document.getElementById('closePanel').addEventListener('click', () => {
+      document.getElementById('panelOverlay').classList.remove('open');
+    });
+    document.getElementById('panelOverlay').addEventListener('click', (e) => {
+      if (e.target.id === 'panelOverlay') e.target.classList.remove('open');
+    });
+
+    function mostrarLogin(){
+      document.getElementById('loginBox').style.display = 'block';
+      document.getElementById('panelContent').style.display = 'none';
+    }
+    function mostrarPanel(){
+      document.getElementById('loginBox').style.display = 'none';
+      document.getElementById('panelContent').style.display = 'block';
+    }
+
+    // ---- Login del administrador ----
+    document.getElementById('loginBtn').addEventListener('click', async () => {
+      const email = document.getElementById('loginEmail').value.trim();
+      const password = document.getElementById('loginPassword').value;
+      const errorEl = document.getElementById('loginError');
+      try {
+        const { error } = await supabase.auth.signInWithPassword({ email, password });
+        if (error) throw error;
+        errorEl.classList.remove('show');
+        mostrarPanel();
+        cargarPedidos();
+      } catch (err) {
+        errorEl.textContent = err.message || 'Correo o contraseña incorrectos.';
+        errorEl.classList.add('show');
+      }
+    });
+    document.getElementById('logoutBtn').addEventListener('click', async () => {
+      await supabase.auth.signOut();
+      mostrarLogin();
+    });
+
+    // ---- Cargar y mostrar el historial de pedidos ----
+    async function cargarPedidos(){
+      try {
+        const { data, error } = await supabase.from('pedidos').select('*').order('fecha', { ascending: false });
+        if (error) throw error;
+        renderPanel(data || []);
+      } catch (err) {
+        console.error('Error cargando pedidos:', err);
+      }
+    }
+
+    function renderPanel(lista){
+      const hoy = new Date().toDateString();
+      const montoTotal = lista.reduce((sum, p) => sum + Number(p.anticipo || 0), 0);
+
+      document.getElementById('statTotal').textContent = lista.length;
+      document.getElementById('statHoy').textContent = lista.filter(p => new Date(p.fecha).toDateString() === hoy).length;
+      document.getElementById('statMonto').textContent = '$' + montoTotal.toLocaleString('es-MX');
+      document.getElementById('panelEmpty').style.display = lista.length ? 'none' : 'block';
+
+      document.getElementById('panelBody').innerHTML = lista.map(p => `
+        <tr>
+          <td class="mono">${p.folio}</td>
+          <td class="mono">${new Date(p.fecha).toLocaleDateString('es-MX', { day:'2-digit', month:'short' })}</td>
+          <td>${p.negocio}<br><span style="color:var(--slate); font-size:.78rem;">${p.nombre}</span></td>
+          <td>${p.paquete}</td>
+          <td class="mono">$${Number(p.anticipo).toLocaleString('es-MX')}</td>
+          <td>
+            <select data-id="${p.id}">
+              <option value="reservado_demo" ${p.estado === 'reservado_demo' ? 'selected' : ''}>Reservado (demo)</option>
+              <option value="anticipo_confirmado" ${p.estado === 'anticipo_confirmado' ? 'selected' : ''}>Anticipo confirmado</option>
+              <option value="en_proceso" ${p.estado === 'en_proceso' ? 'selected' : ''}>En proceso</option>
+              <option value="entregado" ${p.estado === 'entregado' ? 'selected' : ''}>Entregado</option>
+            </select>
+          </td>
+        </tr>
+      `).join('');
+    }
+
+    document.getElementById('panelBody').addEventListener('change', async (e) => {
+      if (e.target.tagName !== 'SELECT') return;
+      const id = e.target.dataset.id;
+      await supabase.from('pedidos').update({ estado: e.target.value }).eq('id', id);
+    });
+
+  } catch (err) {
+    console.error('No se pudo inicializar Supabase:', err);
+  }
+</script>
+</body>
+</html>
