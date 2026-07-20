@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<!--
+  ================================================================
+  BRAITA TUV — Terminados UV, la marca más nueva del grupo
+  ================================================================
+  Página nueva, armada siguiendo el mismo patrón de código que ya
+  usa braita-sinc.html (misma estructura "marca beta / próximamente"),
+  para que se sienta parte de la misma familia del sitio.
+
+  El cliente confirmó que TUV es una marca real (mandó el logo:
+  logo-tuv.png) pero que "aún no hay absolutamente nada" más —
+  ni color oficial, ni catálogo, ni descripción de posicionamiento.
+  Por eso esta página es intencionalmente mínima, igual que Sinc al
+  principio del proyecto.
+
+  PENDIENTE (preguntarle al cliente):
+  - Qué diferencia a TUV de Braita Innovación (ambas son "acabados
+    UV" — hay que aclarar en qué se distinguen para que no compitan
+    entre sí en el sitio).
+  - Color oficial de marca (aquí es gris plata, solo un placeholder
+    inspirado en el propio logo, no una decisión de marca).
+  - Catálogo / servicios reales.
+  - El logo (logo-tuv.png) es real pero es un JPEG con fondo blanco
+    sólido, no un PNG con transparencia — funciona bien para esta
+    página tal cual está.
+
+  Esta página no usa ninguna imagen numerada del mapa compartido del
+  grupo — solo el logo real (logo-tuv.png). Cuando haya fotos de
+  producto reales, se puede agregar una sección de galería después.
+  ================================================================
+-->
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Braita TUV — Terminados UV | Grupo Braita (próximamente)</title>
+<meta name="description" content="Braita TUV, Terminados UV: la marca más nueva del Grupo Braita. Página en construcción.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Crect width='40' height='40' fill='%23202124'/%3E%3Crect x='9' y='9' width='22' height='22' fill='none' stroke='%23F1EFE9' stroke-width='2'/%3E%3Cline x1='9' y1='23' x2='31' y2='23' stroke='%238B8E93' stroke-width='2' stroke-dasharray='3 2'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="premium-animations.css">
+<style>
+  :root{
+    --ink:#0F1117; --ink-soft:#57595C; --paper:#FAFAF9; --paper-soft:#FFFFFF; --panel:#F3F2F0; --line:#D8D7D4;
+    --wood:#8B8E93; --wood-dark:#5F6368; --wood-light:#B9BEC4;
+    --font-display:'Space Grotesk',sans-serif; --font-sans:'Inter',sans-serif; --font-mono:'IBM Plex Mono',monospace;
+    --ease: cubic-bezier(0.16,1,0.3,1);
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{ background: linear-gradient(135deg, var(--paper) 0%, #F8F7F5 100%); color:var(--ink); font-family:var(--font-sans); font-size:16px; line-height:1.7; -webkit-font-smoothing:antialiased; }
+  img,svg{display:block; max-width:100%;}
+  a{color:inherit;}
+  .wrap{max-width:1000px; margin:0 auto; padding:0 32px;}
+  @media (max-width:640px){ .wrap{padding:0 20px;} }
+  .mono{font-family:var(--font-mono);}
+  h1,h2{font-family:var(--font-display); font-weight:700; letter-spacing:-.01em; color:var(--ink);}
+  .eyebrow{ font-family:var(--font-mono); font-size:12.5px; letter-spacing:.13em; text-transform:uppercase; color:var(--wood-dark); display:inline-flex; align-items:center; gap:10px; }
+  .eyebrow::before{ content:''; width:20px; height:2px; background:var(--wood); display:inline-block; }
+
+  .group-switcher { background: #0E0F11; padding: 10px 0; }
+  .group-switcher .gs-wrap { max-width:1200px; margin:0 auto; padding:0 32px; display:flex; align-items:center; gap:22px; flex-wrap:wrap; font-family:var(--font-mono); font-size:11.5px; }
+  @media (max-width:640px){ .group-switcher .gs-wrap{ padding:0 20px; gap:14px; } }
+  .group-switcher .gs-label{ text-transform:uppercase; letter-spacing:.08em; color:#6B6E68; }
+  .group-switcher a{ display:inline-flex; align-items:center; gap:7px; text-decoration:none; color:#ABAAA1; padding:3px 0; border-bottom:2px solid transparent; transition:color .2s ease; }
+  .group-switcher a .gs-dot{ width:7px; height:7px; border-radius:50%; flex-shrink:0; }
+  .group-switcher a:hover{ color:#F5F5F2; }
+  .group-switcher a.active{ color:#F5F5F2; border-bottom-color:currentColor; }
+  .group-switcher a .gs-beta{ opacity:.85; font-size:10px; color:#B98A54; }
+
+  header{ position: sticky; top: 0; z-index: 60; background: rgba(250,250,249,.88); backdrop-filter: blur(20px) saturate(180%); -webkit-backdrop-filter: blur(20px) saturate(180%); border-bottom: 1px solid rgba(216,215,212,.5); box-shadow: 0 8px 32px rgba(0,0,0,0.04); }
+  .nav-row{ display:flex; align-items:center; justify-content:space-between; padding: 20px 0; }
+  .logo{ display:flex; align-items:center; gap:10px; text-decoration:none; }
+  .logo-mark{ width:32px; height:32px; }
+  .logo-text{ font-family:var(--font-display); font-weight:700; font-size:19px; text-transform:uppercase; }
+  .logo-text span{ color:var(--wood); }
+  .badge-beta{ font-family:var(--font-mono); font-size:10.5px; letter-spacing:.08em; text-transform:uppercase; background:var(--wood); color:#fff; padding:5px 10px; border-radius:3px; }
+
+  .hero{ padding:90px 0; text-align:center; }
+  .hero h1{ font-size:clamp(30px,4.4vw,46px); margin:18px 0 20px; line-height:1.15; }
+  .hero p{ font-size:16.5px; color:var(--ink-soft); max-width:56ch; margin:0 auto 34px; }
+
+  .swatch-strip{ display:flex; justify-content:center; gap:10px; margin-bottom:40px; flex-wrap:wrap; }
+  .swatch-strip div{ width:56px; height:56px; border-radius:4px; border:1px solid var(--line); }
+
+  .info-card{ background:var(--paper-soft); border:1px solid var(--line); padding:30px; text-align:left; max-width:640px; margin:0 auto 50px; border-radius:4px; }
+  .info-card h3{ font-size:16px; margin-bottom:12px; }
+  .info-card ul{ padding-left:20px; color:var(--ink-soft); font-size:14.5px; display:flex; flex-direction:column; gap:8px; }
+
+  .btn{ font-family:var(--font-sans); font-weight:600; font-size:14px; padding:14px 26px; text-decoration:none; display:inline-flex; align-items:center; gap:8px; border:1.5px solid transparent; cursor:pointer; transition:transform .2s var(--ease), background .2s var(--ease); }
+  .btn-wood{ background:var(--wood); color:#fff; }
+  .btn-wood:hover{ background:var(--wood-dark); transform:translateY(-2px); }
+  .btn-outline{ border-color:var(--ink); color:var(--ink); }
+  .btn-outline:hover{ background:var(--ink); color:var(--paper-soft); }
+
+  footer{ padding:30px 0; border-top:1px solid var(--line); }
+  .foot-row{ display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:14px; font-size:12.5px; color:var(--ink-soft); font-family:var(--font-mono); }
+
+  .admin-link-row{ margin-top:16px; text-align:center; }
+  .admin-link{ display:inline-flex; align-items:center; gap:8px; font-family:var(--font-mono); font-size:12px; letter-spacing:.04em; color:var(--ink-soft); text-decoration:none; }
+  .admin-link:hover{ color:var(--wood-dark); }
+  .admin-link::before{ content:'●'; font-size:8px; color:#3F7D4C; }
+
+  /* ═══════════════════════════════════════════════════════════════
+     DISEÑO VISUAL PREMIUM — GRADIENTES, COLORES Y DECORATIVOS
+     BRAITA TUV — Terminados UV (gris plata, provisional)
+     ═══════════════════════════════════════════════════════════════ */
+
+  body {
+    background: linear-gradient(135deg, #FAFAF9 0%, #F7F5F2 100%);
+  }
+
+  .hero {
+    background: linear-gradient(135deg, rgba(139,142,147,0.06) 0%, rgba(139,142,147,0.02) 100%),
+                linear-gradient(180deg, #FAFAF9 0%, #F9F7F4 100%);
+    position: relative;
+    overflow: visible;
+  }
+
+  .hero::before {
+    content: '';
+    position: absolute;
+    top: -100px;
+    left: -100px;
+    width: 450px;
+    height: 450px;
+    background: radial-gradient(circle, rgba(139,142,147,0.12) 0%, transparent 70%);
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 0;
+    filter: blur(40px);
+  }
+
+  .hero::after {
+    content: '';
+    position: absolute;
+    bottom: -80px;
+    right: -80px;
+    width: 400px;
+    height: 400px;
+    background: radial-gradient(circle, rgba(139,142,147,0.08) 0%, transparent 70%);
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  main {
+    position: relative;
+    z-index: 1;
+  }
+
+  .info-card {
+    background: linear-gradient(135deg, #FFFFFF 0%, #F9F7F4 100%);
+    border: 1px solid rgba(139,142,147,0.15);
+    box-shadow: 0 4px 16px rgba(139,142,147,0.06);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .info-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 4px;
+    height: 100%;
+    background: linear-gradient(180deg, var(--wood) 0%, transparent 100%);
+    z-index: 1;
+  }
+
+  .info-card-img {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+  }
+  .info-card-img img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 0;
+  }
+  .info-card-img::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, rgba(255,255,255,0.94) 0%, rgba(249,247,244,0.9) 100%);
+  }
+  .info-card h3, .info-card ul { position: relative; z-index: 2; }
+
+  .swatch-strip {
+    background: linear-gradient(90deg, transparent 0%, rgba(139,142,147,0.04) 50%, transparent 100%);
+    padding: 30px 20px;
+    border-radius: 8px;
+    margin-bottom: 50px;
+  }
+
+  .swatch-strip div {
+    box-shadow: 0 2px 8px rgba(139,142,147,0.12);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+
+  .swatch-strip div:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(139,142,147,0.18);
+  }
+
+  /* LÍNEA DECORATIVA EN HERO */
+  .hero h1::after {
+    content: '';
+    display: block;
+    width: 80px;
+    height: 3px;
+    background: linear-gradient(90deg, var(--wood) 0%, transparent 100%);
+    margin: 20px auto 0;
+    border-radius: 2px;
+  }
+
+  /* BOTÓN CON EFECTO */
+  .btn-wood {
+    position: relative;
+    overflow: hidden;
+  }
+
+  .btn-wood::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, rgba(255,255,255,0.2) 0%, transparent 100%);
+    z-index: -1;
+  }
+
+  /* FOOTER CON GRADIENTE MADERA */
+  footer {
+    background: linear-gradient(135deg, rgba(139,142,147,0.04) 0%, rgba(139,142,147,0.08) 100%);
+    border-top: 2px solid rgba(139,142,147,0.15);
+  }
+
+  /* ESPACIOS PARA IMÁGENES */
+  .info-card::after {
+    content: 'Espacio para fotos reales de acabados TUV';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 11px;
+    color: rgba(139,142,147,0.25);
+    font-family: var(--font-mono);
+    text-align: center;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.3s;
+    z-index: 10;
+  }
+
+  .info-card:hover::after {
+    opacity: 1;
+  }
+
+  /* GRID SWATCHES DECORATIVO */
+  .badge-beta {
+    box-shadow: 0 2px 8px rgba(139,142,147,0.2);
+  }
+
+</style>
+</head>
+<body>
+
+<div class="group-switcher">
+  <div class="gs-wrap">
+    <span class="gs-label">Grupo Braita</span>
+    <a href="index.html"><span class="gs-dot" style="background:#2F6690"></span>Innovación</a>
+    <a href="braita-select.html"><span class="gs-dot" style="background:#C6A24D"></span>Select</a>
+    <a href="braita-maquinaria.html"><span class="gs-dot" style="background:#E4610F"></span>Maquinaria</a>
+    <a href="braita-sinc.html"><span class="gs-dot" style="background:#8B5A2B"></span>Sinc <span class="gs-beta">(beta)</span></a>
+    <a href="braita-tuv.html" class="active"><span class="gs-dot" style="background:#9AA1A8"></span>TUV <span class="gs-beta">(nuevo)</span></a>
+  </div>
+</div>
+
+<header>
+  <div class="wrap nav-row">
+    <a href="index.html" class="logo">
+      <img class="logo-mark" src="logo-tuv.png" alt="Braita TUV" style="width:32px; height:32px; object-fit:contain;">
+      <span class="logo-text">BRAITA <span>TUV</span></span>
+    </a>
+    <span class="badge-beta">Próximamente</span>
+  </div>
+</header>
+
+<main>
+  <section class="hero wrap">
+    <img src="logo-tuv.png" alt="Braita TUV — Terminados UV" style="max-width:200px; margin:0 auto 26px;">
+    <span class="eyebrow" style="justify-content:center;">Terminados UV · Grupo Braita</span>
+    <h1>Esta marca está en construcción.</h1>
+    <p>Braita TUV (Terminados UV) es la marca más nueva del grupo. Todavía no hay color oficial, catálogo ni descripción de posicionamiento confirmada — esta página existe como punto de partida, con el logo real que ya nos compartió el cliente.</p>
+
+    <div class="swatch-strip" aria-hidden="true">
+      <div style="background:linear-gradient(135deg,#2A2C2E,#111214);"></div>
+      <div style="background:linear-gradient(135deg,#8B8E93,#5F6368);"></div>
+      <div style="background:linear-gradient(135deg,#E8E6E1,#C7C2B4);"></div>
+    </div>
+
+    <div class="info-card">
+      <h3>Lo que falta para completar esta página:</h3>
+      <ul>
+        <li>Qué ofrece exactamente TUV y en qué se diferencia de Braita Innovación (ambas son de acabados UV)</li>
+        <li>Color oficial de marca (el gris plata de aquí es solo un placeholder inspirado en el logo, no una decisión de marca)</li>
+        <li>Catálogo o servicios reales</li>
+        <li>Fotos de producto</li>
+      </ul>
+    </div>
+
+    <div style="display:flex; gap:14px; justify-content:center; flex-wrap:wrap;">
+      <a href="#" id="waTop" class="btn btn-wood" target="_blank">Preguntar por Braita TUV</a>
+      <a href="index.html" class="btn btn-outline">Ver el resto del grupo Braita</a>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap foot-row">
+    <span>© 2026 Braita TUV — marca del Grupo Braita (en desarrollo), Ocotlán, Jal.</span>
+    <a href="index.html" style="color:var(--wood-dark);">← Volver al grupo Braita</a>
+  </div>
+  <div class="wrap admin-link-row">
+    <a href="index.html#panel-admin" class="admin-link">Ver historial de pedidos (panel administrador)</a>
+  </div>
+</footer>
+
+<script>
+  const WA = '523921287299'; // Número real de Braita (antes era 523929313919, incorrecto)
+  document.getElementById('waTop').href = `https://wa.me/${WA}?text=${encodeURIComponent('Hola, vi que Braita va a tener una marca de Terminados UV (TUV) y quiero más información.')}`;
+</script>
+<script src="premium-interactions.js"></script>
+
+</body>
+</html>
